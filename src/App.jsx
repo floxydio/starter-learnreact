@@ -1,19 +1,72 @@
-import React from "react" // Berfungsi untuk mengimport library React
+import React, { useState, useEffect } from "react" // Berfungsi untuk mengimport library React
 import Button from "./components/Button"
+import TodoList from "./components/TodoList"
 
 export default function App() {
-  const nilai = 5
-  const nilaiB = 5
-  const myName = "Dio"
-  const templateH2 = <h2>Hello World dari H2</h2> // Berfungsi untuk membuat template HTML
+  const [counter, setCounter] = useState(0) // useState adalah sebuah function yang berfungsi untuk membuat state baru. useState akan mengembalikan sebuah array dengan 2 elemen, yaitu state itu sendiri dan sebuah function untuk mengubah state tersebut. useState akan menerima sebuah argumen yang akan menjadi nilai awal dari state tersebut.
+  const [todo, setTodo] = useState([])
+  const [addTodo, setAddTodo] = useState("")
+
+  function incrementCounter() {
+    setCounter(counter + 1)
+  }
+
+  function decrementCounter() {
+    setCounter(counter - 1)
+  }
+
+  function dataTodoDummy() {
+    const data = [
+      {
+        id: 1,
+        title: "Belajar React",
+        description: "Belajar React Hooks"
+      },
+      {
+        id: 2,
+        title: "Belajar React Native",
+        description: "Belajar React Native Hooks"
+      }
+    ]
+    setTodo(
+      data)
+  }
+
+  useEffect(() => {
+    dataTodoDummy()
+  }, [])
 
   return (
     <div>
-      <h1>Hello World</h1>
-      {templateH2} {/* Berfungsi untuk memanggil template HTML */}
-      {nilai + nilaiB} {/* Berfungsi untuk menjumlahkan nilai */}
-      <p>My name is: {myName}</p> {/* Berfungsi untuk memanggil variabel */}
-      <Button bColor={'red'} colorText={'white'} myText={'Click Me'} onFunction={() => { console.log("Test") }} /> {/* Berfungsi untuk memanggil komponen Button dengan props */}
+      <p>{counter}</p>
+      <button onClick={incrementCounter}>Increment</button>
+      <button onClick={decrementCounter}>Decrement</button>
+      <p>=====================</p>
+
+      <input type="text" value={
+        addTodo
+      } onChange={(e) => setAddTodo(e.target.value)} />
+      <button onClick={() => {
+        setTodo([...todo, { id: todo.length + 1, title: addTodo, description: addTodo }])
+        // clear input
+        setAddTodo("")
+      }}>Add Todo</button>
+
+      {todo.map((item) => {
+        return (
+          <div key={item.id}>
+            <h1>{item.title}</h1>
+            <p>{item.description}</p>
+          </div>
+        )
+      })}
+
+
+      <p>=====================</p>
+      {todo.map((item) => {
+        return <TodoList title={item.title} description={item.description} />
+      })}
+
     </div>
   )
 }
